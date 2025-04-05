@@ -289,7 +289,7 @@ static inline size_t compressSIMD(SymbolTable &symbolTable, u8* symbolBase, size
             if (++batchPos == 512) break;
          } while(curOff < len[curLine]);
    
-         if ((batchPos == 512) || (outOff > (1<<19)) || (++curLine >= nlines)) { // cannot accumulate more?
+         if ((batchPos == 512) || (outOff > (1<<19)) || (++curLine >= nlines) || (((len[curLine])*2 + 7) > budget)) { // cannot accumulate more?
             if (batchPos-empty >= 32) { // if we have enough work, fire off fsst_compressAVX512 (32 is due to max 4x8 unrolling)
                // radix-sort jobs on length (longest string first) 
                // -- this provides best load balancing and allows to skip empty jobs at the end
