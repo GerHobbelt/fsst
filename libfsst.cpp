@@ -626,12 +626,12 @@ extern "C" size_t fsst_compress(fsst_encoder_t *encoder, size_t nlines, const si
    // to be faster than scalar, simd needs 64 lines or more of length >=12; or fewer lines, but big ones (totLen > 32KB)
    size_t totLen = accumulate(lenIn, lenIn+nlines, 0);
    int simd = totLen > nlines*12 && (nlines > 64 || totLen > (size_t) 1<<15); 
-   return _compressAuto((libfsst::Encoder*) encoder, nlines, lenIn, strIn, size, output, lenOut, strOut, 3*simd);
+   return _compressAuto((Encoder*) encoder, nlines, lenIn, strIn, size, output, lenOut, strOut, 3*simd);
 }
 
 /* deallocate encoder */
 extern "C" void fsst_destroy(fsst_encoder_t* encoder) {
-  libfsst::Encoder *e = (libfsst::Encoder*) encoder; 
+  Encoder *e = (Encoder*) encoder; 
    delete e;
 }
 

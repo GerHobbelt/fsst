@@ -403,12 +403,13 @@ ulong compressAuto(Encoder *e, ulong nlines, const ulong lenIn[], const u8 *strI
 }
 }  // namespace libfsst
 
+using namespace libfsst;
 // the main compression function (everything automatic)
 extern "C" ulong fsst_compress(fsst_encoder_t *encoder, ulong nlines, const ulong lenIn[], const u8 *strIn[], ulong size, u8 *output, ulong *lenOut, u8 *strOut[]) {
    // to be faster than scalar, simd needs 64 lines or more of length >=12; or fewer lines, but big ones (totLen > 32KB)
    ulong totLen = accumulate(lenIn, lenIn+nlines, 0);
    int simd = totLen > nlines*12 && (nlines > 64 || totLen > (ulong) 1<<15); 
-   return libfsst::_compressAuto((libfsst::Encoder*) encoder, nlines, lenIn, strIn, size, output, lenOut, strOut, 3*simd);
+   return _compressAuto((libfsst::Encoder*) encoder, nlines, lenIn, strIn, size, output, lenOut, strOut, 3*simd);
 }
 
 /* deallocate encoder */
